@@ -222,8 +222,8 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#normalize-the-data">
-     Normalize the data
+    <a class="reference internal nav-link" href="#plate-normalization">
+     Plate Normalization
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -244,6 +244,11 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#recheck-for-spatial-bias">
      Recheck for spatial bias
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#quantile-normalization">
+     Quantile normalization
     </a>
    </li>
   </ul>
@@ -421,8 +426,8 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#normalize-the-data">
-     Normalize the data
+    <a class="reference internal nav-link" href="#plate-normalization">
+     Plate Normalization
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -443,6 +448,11 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#recheck-for-spatial-bias">
      Recheck for spatial bias
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#quantile-normalization">
+     Quantile normalization
     </a>
    </li>
   </ul>
@@ -1179,11 +1189,10 @@ dtype: int64
 </div>
 <div class="tex2jax_ignore mathjax_ignore section" id="normalization">
 <h1>Normalization<a class="headerlink" href="#normalization" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="normalize-the-data">
-<h2>Normalize the data<a class="headerlink" href="#normalize-the-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="plate-normalization">
+<h2>Plate Normalization<a class="headerlink" href="#plate-normalization" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Robust normalization of each plate based on the negative control</p></li>
-<li><p>Quantile normalization over the features of each sample (standardize magnitude and distribution)</p></li>
 </ul>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
@@ -1201,13 +1210,6 @@ dtype: int64
     <span class="n">med_neg</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_mask</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span> <span class="c1"># Median of negative control on the plate    </span>
     <span class="n">mad_neg</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_mask</span><span class="p">]</span><span class="o">.</span><span class="n">mad</span><span class="p">()</span> <span class="c1"># MAD of neg ctrl on plate    </span>
     <span class="n">features_norm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">curr</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">med_neg</span><span class="p">)</span> <span class="o">/</span> <span class="n">mad_neg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Robust normalization based on the median and MAD of the negative conrol group within each plate, on each feature</span>
-
-<span class="c1"># Quantile transform the feature data within each sample - aim is to standardize the overall magnitude and distribution across features within each sample. </span>
-<span class="n">qt</span> <span class="o">=</span> <span class="n">QuantileTransformer</span><span class="p">(</span><span class="n">n_quantiles</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">output_distribution</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">features_norm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">features_norm</span><span class="o">.</span><span class="n">T</span><span class="p">)),</span> <span class="n">index</span><span class="o">=</span><span class="n">features_norm</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">features_norm</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-
-<span class="c1"># # Normalize the overall magnitude of each sample&#39;s feature vector (alternative to QN above)</span>
-<span class="c1"># features_norm = features_norm.apply(lambda x: x/np.linalg.norm(x), axis=1)</span>
 </pre></div>
 </div>
 </div>
@@ -1222,7 +1224,7 @@ dtype: int64
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize the feature median on the plate</span>
 <span class="n">exp</span> <span class="o">=</span> <span class="s1">&#39;HRCE-1&#39;</span>
-<span class="n">feat</span> <span class="o">=</span> <span class="s1">&#39;feature_4&#39;</span>
+<span class="n">feat</span> <span class="o">=</span> <span class="s1">&#39;feature_0&#39;</span>
 
 <span class="n">data_neg</span> <span class="o">=</span> <span class="n">features_norm</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">neg_ctrl</span><span class="p">]</span>
 <span class="n">data_neg</span> <span class="o">=</span> <span class="n">data_neg</span><span class="p">[</span><span class="n">data_neg</span><span class="o">.</span><span class="n">experiment</span><span class="o">==</span><span class="n">exp</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;well_row&#39;</span><span class="p">,</span> <span class="s1">&#39;well_col&#39;</span><span class="p">])[</span><span class="n">feat</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;well_row&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;well_col&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">feat</span><span class="p">)</span>
@@ -1234,19 +1236,19 @@ dtype: int64
 <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">data_neg</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Negative Controls; feature_4&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Negative Controls; feature_0&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Column&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Row&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">data_pos</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Positive Controls; feature_4&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Positive Controls; feature_0&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Column&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Row&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">data_allactive</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;All Active Wells; feature_4&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;All Active Wells; feature_0&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Column&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Row&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">});</span>
 </pre></div>
@@ -1363,12 +1365,32 @@ dtype: int64
 </div>
 </div>
 </div>
+<div class="section" id="quantile-normalization">
+<h2>Quantile normalization<a class="headerlink" href="#quantile-normalization" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Within each sample, quantile transform the feature distribution</p></li>
+</ul>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">features_qn</span> <span class="o">=</span> <span class="n">features_mp</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Quantile transform the feature data within each sample - aim is to standardize the overall magnitude and distribution across features within each sample. </span>
+<span class="n">qt</span> <span class="o">=</span> <span class="n">QuantileTransformer</span><span class="p">(</span><span class="n">n_quantiles</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">output_distribution</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">features_qn</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">features_qn</span><span class="o">.</span><span class="n">T</span><span class="p">)),</span> <span class="n">index</span><span class="o">=</span><span class="n">features_qn</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">features_qn</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="c1"># # Normalize the overall magnitude of each sample&#39;s feature vector (alternative to QN above)</span>
+<span class="c1"># features_norm = features_norm.apply(lambda x: x/np.linalg.norm(x), axis=1)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="tex2jax_ignore mathjax_ignore section" id="standardize-the-data-before-pca">
 <h1>Standardize the Data before PCA<a class="headerlink" href="#standardize-the-data-before-pca" title="Permalink to this headline">¶</a></h1>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">features_std</span> <span class="o">=</span> <span class="n">features_mp</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">features_std</span> <span class="o">=</span> <span class="n">features_qn</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
 <span class="c1"># Standardize the data within each feature before PCA</span>
 <span class="c1">#   For each experiment, treat the negative and positive control data as &quot;training&quot; data and the rest as &quot;test&quot; data </span>
@@ -1498,9 +1520,9 @@ dtype: int64
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Outliers dropped for HRCE-1, Mock: 2.9%
-Outliers dropped for HRCE-1, Active: 3.3%
-Outliers dropped for HRCE-2, Mock: 0.65%
-Outliers dropped for HRCE-2, Active: 2.1%
+Outliers dropped for HRCE-1, Active: 3.0%
+Outliers dropped for HRCE-2, Mock: 1.4%
+Outliers dropped for HRCE-2, Active: 2.6%
 </pre></div>
 </div>
 </div>
@@ -1618,12 +1640,12 @@ HRCE-2 Classification Accuracy: 0.999
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Z-factors for each experiment:
-HRCE-1: 0.364
-HRCE-2: 0.330
-Overall: 0.349
+HRCE-1: 0.350
+HRCE-2: 0.336
+Overall: 0.344
 </pre></div>
 </div>
-<img alt="_images/Recursion_2019a_HRCE_47_1.png" src="_images/Recursion_2019a_HRCE_47_1.png" />
+<img alt="_images/Recursion_2019a_HRCE_49_1.png" src="_images/Recursion_2019a_HRCE_49_1.png" />
 </div>
 </div>
 </div>
@@ -1655,7 +1677,7 @@ Overall: 0.349
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_49_0.png" src="_images/Recursion_2019a_HRCE_49_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_51_0.png" src="_images/Recursion_2019a_HRCE_51_0.png" />
 </div>
 </div>
 </div>
@@ -1685,7 +1707,7 @@ Overall: 0.349
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_51_0.png" src="_images/Recursion_2019a_HRCE_51_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_53_0.png" src="_images/Recursion_2019a_HRCE_53_0.png" />
 </div>
 </div>
 </div>
@@ -1774,7 +1796,7 @@ Overall: 0.349
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_54_0.png" src="_images/Recursion_2019a_HRCE_54_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_56_0.png" src="_images/Recursion_2019a_HRCE_56_0.png" />
 </div>
 </div>
 <div class="section" id="mean-difference-plots-between-the-2-experiments">
@@ -1801,7 +1823,7 @@ Overall: 0.349
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_56_0.png" src="_images/Recursion_2019a_HRCE_56_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_58_0.png" src="_images/Recursion_2019a_HRCE_58_0.png" />
 </div>
 </div>
 </div>
@@ -1841,7 +1863,7 @@ Overall: 0.349
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_59_0.png" src="_images/Recursion_2019a_HRCE_59_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_61_0.png" src="_images/Recursion_2019a_HRCE_61_0.png" />
 </div>
 </div>
 </div>
@@ -1883,7 +1905,7 @@ Overall: 0.349
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_61_0.png" src="_images/Recursion_2019a_HRCE_61_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_63_0.png" src="_images/Recursion_2019a_HRCE_63_0.png" />
 </div>
 </div>
 </div>
