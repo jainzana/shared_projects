@@ -344,6 +344,11 @@ const thebe_selector_output = ".output, .cell_output"
      Hit Scores
     </a>
    </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dose-response-of-the-top-5-drug-candidates">
+     Dose-response of the top 5 drug candidates
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -561,6 +566,11 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#hit-scores">
      Hit Scores
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dose-response-of-the-top-5-drug-candidates">
+     Dose-response of the top 5 drug candidates
     </a>
    </li>
   </ul>
@@ -2058,6 +2068,25 @@ Overall: 0.458
 </div>
 </div>
 </div>
+<p><strong>Recursion’s top 5 hits</strong></p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rx_hits</span> <span class="o">=</span> <span class="n">rx_hit_scores</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;treatment&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hit_score</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rx_hits</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              treatment  hit_score
+0  Remdesivir (GS-5734)   0.976726
+1             GS-441524   0.883930
+2           Aloxistatin   0.790375
+3               CX-4945   0.760835
+4             almitrine   0.720646
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">.451</span><span class="p">,</span> <span class="mf">0.451</span><span class="p">,</span> <span class="mf">0.91</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
@@ -2090,7 +2119,39 @@ Overall: 0.458
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_68_0.png" src="_images/Recursion_2019a_HRCE_68_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_70_0.png" src="_images/Recursion_2019a_HRCE_70_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="dose-response-of-the-top-5-drug-candidates">
+<h2>Dose-response of the top 5 drug candidates<a class="headerlink" href="#dose-response-of-the-top-5-drug-candidates" title="Permalink to this headline">¶</a></h2>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">treatments</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Remdesivir (GS-5734)&#39;</span><span class="p">,</span> <span class="s1">&#39;GS-441524&#39;</span><span class="p">,</span> <span class="s1">&#39;trihexyphenidyl&#39;</span><span class="p">,</span> <span class="s1">&#39;Aloxistatin&#39;</span><span class="p">,</span> <span class="s1">&#39;cloperastine&#39;</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;yellowgreen&#39;</span><span class="p">,</span> <span class="s1">&#39;turquoise&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;gold&#39;</span><span class="p">,</span> <span class="s1">&#39;magenta&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">]</span>
+
+<span class="n">ctrl_mask</span> <span class="o">=</span> <span class="n">main_ctrls</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">disease_scores</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">));</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;on_disease_score&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;off_disease_score&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">disease_scores</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ctrl_mask</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;disease_condition&#39;</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span> <span class="n">hue_order</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Inactive&#39;</span><span class="p">,</span> <span class="s1">&#39;Active&#39;</span><span class="p">]);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;On-disease Score&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">));</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Off-disease Score&#39;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">});</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+
+<span class="n">idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">IndexSlice</span>
+<span class="c1"># Plot each of the treatments and associated colors listed above</span>
+<span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">tx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="n">treatments</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">[:,</span><span class="n">tx</span><span class="p">],</span> <span class="p">:]</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span> <span class="s1">&#39;treatment_conc&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">on_disease_score</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">off_disease_score</span><span class="p">,</span> <span class="s1">&#39;.-&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">tx</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">on_disease_score</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">off_disease_score</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span><span class="mi">12</span><span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Recursion_2019a_HRCE_72_0.png" src="_images/Recursion_2019a_HRCE_72_0.png" />
 </div>
 </div>
 </div>
