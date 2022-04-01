@@ -34,6 +34,6 @@ Here is a preview of the cell contents:
 -------------------
 ['# Import libraries', 'import string', 'import pandas as pd', 'import numpy as np', 'import matplotlib.pyplot as plt']
 ...
-['', '', '# Load in the dataset, which is subset of the full dataset that only contains HRCE data and treatments that were shared between the 2 experiments', "metadata = pd.read_csv('/Volumes/GoogleDrive/My Drive/Colab Notebooks/Recursion COVID/metadata.csv')", "features = pd.read_csv('/Volumes/GoogleDrive/My Drive/Colab Notebooks/Recursion COVID/embeddings.csv')"]
+['from sklearn.manifold import TSNE', '', '# Load in the dataset', 'features = pd.read_csv("/Volumes/GoogleDrive/My Drive/Colab Notebooks/Recursion COVID/embeddings.csv")', 'metadata = pd.read_csv("/Volumes/GoogleDrive/My Drive/Colab Notebooks/Recursion COVID/metadata.csv")']
 -------------------
 
