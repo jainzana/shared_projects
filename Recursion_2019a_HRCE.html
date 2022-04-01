@@ -330,8 +330,8 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#key-treatments-that-were-in-both-experiments">
-     Key treatments that were in both experiments
+    <a class="reference internal nav-link" href="#visualize-some-treatments-that-were-in-both-experiments">
+     Visualize some treatments that were in both experiments
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -554,8 +554,8 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#key-treatments-that-were-in-both-experiments">
-     Key treatments that were in both experiments
+    <a class="reference internal nav-link" href="#visualize-some-treatments-that-were-in-both-experiments">
+     Visualize some treatments that were in both experiments
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -1027,13 +1027,8 @@ dtype: int64
                           <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">,</span> <span class="s1">&#39;disease_condition&#39;</span><span class="p">,</span> <span class="s1">&#39;treatment&#39;</span><span class="p">,</span> <span class="s1">&#39;treatment_conc&#39;</span><span class="p">],</span> 
                           <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>\
                    <span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Consolidate metadata and features into a single dataframe and setup multi-index</span>
+
+<span class="c1"># Consolidate metadata and features into a single dataframe and setup multi-index</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">append</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">idx_order</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">,</span> <span class="s1">&#39;plate&#39;</span><span class="p">,</span> <span class="s1">&#39;well_col&#39;</span><span class="p">,</span> <span class="s1">&#39;well_row&#39;</span><span class="p">,</span> <span class="s1">&#39;experiment&#39;</span><span class="p">,</span> <span class="s1">&#39;disease_condition&#39;</span><span class="p">,</span> <span class="s1">&#39;treatment&#39;</span><span class="p">,</span> <span class="s1">&#39;treatment_conc&#39;</span><span class="p">,</span> <span class="s1">&#39;samp_group&#39;</span><span class="p">,</span> <span class="s1">&#39;well_id&#39;</span><span class="p">]</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reorder_levels</span><span class="p">(</span><span class="n">idx_order</span><span class="p">)</span>
@@ -1074,7 +1069,7 @@ dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_16_0.png" src="_images/Recursion_2019a_HRCE_16_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_15_0.png" src="_images/Recursion_2019a_HRCE_15_0.png" />
 </div>
 </div>
 </div>
@@ -1113,7 +1108,7 @@ dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_18_0.png" src="_images/Recursion_2019a_HRCE_18_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_17_0.png" src="_images/Recursion_2019a_HRCE_17_0.png" />
 </div>
 </div>
 </div>
@@ -1161,7 +1156,7 @@ dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_20_0.png" src="_images/Recursion_2019a_HRCE_20_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_19_0.png" src="_images/Recursion_2019a_HRCE_19_0.png" />
 </div>
 </div>
 </div>
@@ -1204,7 +1199,7 @@ dtype: int64
   warnings.warn(
 </pre></div>
 </div>
-<img alt="_images/Recursion_2019a_HRCE_22_1.png" src="_images/Recursion_2019a_HRCE_22_1.png" />
+<img alt="_images/Recursion_2019a_HRCE_21_1.png" src="_images/Recursion_2019a_HRCE_21_1.png" />
 </div>
 </div>
 </div>
@@ -1266,7 +1261,7 @@ dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_24_0.png" src="_images/Recursion_2019a_HRCE_24_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_23_0.png" src="_images/Recursion_2019a_HRCE_23_0.png" />
 </div>
 </div>
 </div>
@@ -1315,7 +1310,7 @@ dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_26_0.png" src="_images/Recursion_2019a_HRCE_26_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_25_0.png" src="_images/Recursion_2019a_HRCE_25_0.png" />
 </div>
 </div>
 </div>
@@ -1375,7 +1370,7 @@ dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_31_0.png" src="_images/Recursion_2019a_HRCE_31_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_30_0.png" src="_images/Recursion_2019a_HRCE_30_0.png" />
 </div>
 </div>
 </div>
@@ -1412,7 +1407,7 @@ dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_33_0.png" src="_images/Recursion_2019a_HRCE_33_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_32_0.png" src="_images/Recursion_2019a_HRCE_32_0.png" />
 </div>
 </div>
 </div>
@@ -1491,7 +1486,7 @@ dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_37_0.png" src="_images/Recursion_2019a_HRCE_37_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_36_0.png" src="_images/Recursion_2019a_HRCE_36_0.png" />
 </div>
 </div>
 </div>
@@ -1802,7 +1797,7 @@ HRCE-2: 0.467
 Overall: 0.509
 </pre></div>
 </div>
-<img alt="_images/Recursion_2019a_HRCE_50_1.png" src="_images/Recursion_2019a_HRCE_50_1.png" />
+<img alt="_images/Recursion_2019a_HRCE_49_1.png" src="_images/Recursion_2019a_HRCE_49_1.png" />
 </div>
 </div>
 </div>
@@ -1842,7 +1837,7 @@ Overall: 0.509
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_52_0.png" src="_images/Recursion_2019a_HRCE_52_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_51_0.png" src="_images/Recursion_2019a_HRCE_51_0.png" />
 </div>
 </div>
 </div>
@@ -1874,7 +1869,7 @@ Overall: 0.509
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_54_0.png" src="_images/Recursion_2019a_HRCE_54_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_53_0.png" src="_images/Recursion_2019a_HRCE_53_0.png" />
 </div>
 </div>
 </div>
@@ -1944,7 +1939,7 @@ Overall: 0.509
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_57_0.png" src="_images/Recursion_2019a_HRCE_57_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_56_0.png" src="_images/Recursion_2019a_HRCE_56_0.png" />
 </div>
 </div>
 <div class="section" id="mean-difference-plots-between-the-2-experiments">
@@ -1975,7 +1970,7 @@ Overall: 0.509
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_59_0.png" src="_images/Recursion_2019a_HRCE_59_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_58_0.png" src="_images/Recursion_2019a_HRCE_58_0.png" />
 </div>
 </div>
 </div>
@@ -2027,12 +2022,12 @@ Overall: 0.509
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_62_0.png" src="_images/Recursion_2019a_HRCE_62_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_61_0.png" src="_images/Recursion_2019a_HRCE_61_0.png" />
 </div>
 </div>
 </div>
-<div class="section" id="key-treatments-that-were-in-both-experiments">
-<h2>Key treatments that were in both experiments<a class="headerlink" href="#key-treatments-that-were-in-both-experiments" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="visualize-some-treatments-that-were-in-both-experiments">
+<h2>Visualize some treatments that were in both experiments<a class="headerlink" href="#visualize-some-treatments-that-were-in-both-experiments" title="Permalink to this headline">¶</a></h2>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">treatments</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Remdesivir (GS-5734)&#39;</span><span class="p">,</span> <span class="s1">&#39;GS-441524&#39;</span><span class="p">,</span> <span class="s1">&#39;Ritonavir&#39;</span><span class="p">,</span> <span class="s1">&#39;Lopinavir&#39;</span><span class="p">,</span> <span class="s1">&#39;Camostat&#39;</span><span class="p">,</span>  <span class="s1">&#39;Thymoquinone&#39;</span><span class="p">,</span> <span class="s1">&#39;Idelalisib&#39;</span><span class="p">]</span>
@@ -2077,7 +2072,7 @@ Overall: 0.509
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_64_0.png" src="_images/Recursion_2019a_HRCE_64_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_63_0.png" src="_images/Recursion_2019a_HRCE_63_0.png" />
 </div>
 </div>
 </div>
@@ -2129,7 +2124,7 @@ Overall: 0.509
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_66_0.png" src="_images/Recursion_2019a_HRCE_66_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_65_0.png" src="_images/Recursion_2019a_HRCE_65_0.png" />
 </div>
 </div>
 </div>
@@ -2252,7 +2247,7 @@ Overall: 0.509
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_71_0.png" src="_images/Recursion_2019a_HRCE_71_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_70_0.png" src="_images/Recursion_2019a_HRCE_70_0.png" />
 </div>
 </div>
 </div>
@@ -2296,7 +2291,7 @@ Overall: 0.509
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Recursion_2019a_HRCE_73_0.png" src="_images/Recursion_2019a_HRCE_73_0.png" />
+<img alt="_images/Recursion_2019a_HRCE_72_0.png" src="_images/Recursion_2019a_HRCE_72_0.png" />
 </div>
 </div>
 </div>
